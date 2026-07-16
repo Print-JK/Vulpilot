@@ -1,0 +1,11 @@
+[project]
+name = "vulpilot"
+version = "0.1.0"
+description = "AI-assisted penetration testing report generator."
+requires-python = ">=3.11"
+
+[tool.black]
+line-length = 88
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

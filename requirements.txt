@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pydantic
+jinja2
+weasyprint
+python-multipart
+lxml
+requests
+openai
