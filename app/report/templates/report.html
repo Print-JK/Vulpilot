@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Vulpilot Report</title>
+
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body>
+
+<h1>Vulpilot Security Report</h1>
+
+<h2>Executive Summary</h2>
+
+<p>Total Findings: {{ total_findings }}</p>
+
+<ul>
+    <li>Critical: {{ severity_counts.Critical }}</li>
+    <li>High: {{ severity_counts.High }}</li>
+    <li>Medium: {{ severity_counts.Medium }}</li>
+    <li>Low: {{ severity_counts.Low }}</li>
+    <li>Informational: {{ severity_counts.Informational }}</li>
+</ul>
+
+<hr>
+
+<h2>Findings</h2>
+
+{% for finding in findings %}
+
+<div class="finding">
+
+<h3>{{ finding.title }}</h3>
+
+<p><strong>Severity:</strong> {{ finding.severity }}</p>
+
+<p><strong>Host:</strong> {{ finding.host }}</p>
+
+<p><strong>Port:</strong> {{ finding.port }}</p>
+
+<p><strong>Tool:</strong> {{ finding.tool }}</p>
+
+<p><strong>Description:</strong></p>
+
+<p>{{ finding.description }}</p>
+
+<pre>{{ finding.evidence }}</pre>
+
+</div>
+
+<hr>
+
+{% endfor %}
+
+</body>
+</html>

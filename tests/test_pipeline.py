@@ -1,6 +1,7 @@
 from app.parsers.factory import ParserFactory
 from app.services.pipeline import process_all
 from app.services.deduplicate import DuplicateDetectionService
+from app.report.renderer import generate_html
 
 
 def run_test(scanner: str, file_path: str):
@@ -22,13 +23,13 @@ def main():
     )
 
     merged = DuplicateDetectionService.merge(findings)
+    
+    html = generate_html(merged)
 
-    print(f"\nMerged Findings: {len(merged)}\n")
+    with open("report.html", "w", encoding="utf-8") as report:
+        report.write(html)
 
-    for finding in merged:
-        print(finding.model_dump())
-        print("-" * 70)
-
+    print("Generated report.html")  
 
 if __name__ == "__main__":
     main()
