@@ -2,7 +2,7 @@ from pathlib import Path
 import tempfile
 
 from fastapi import APIRouter, UploadFile, File
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import Request
 from app.parsers.factory import ParserFactory
@@ -55,3 +55,38 @@ async def generate(scan: UploadFile = File(...)):
     html = generate_html(report)
 
     return HTMLResponse(html)
+
+@router.post("/generate/pdf")
+async def generate_pdf(scan: UploadFile = File(...)):
+
+    suffix = Path(scan.filename).suffix
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+        tmp.write(await scan.read())
+        scan_path = tmp.name
+
+    parser = ParserFactory.create("nmap")
+
+    raw = parser.parse(scan_path)
+
+    findings = process_all(raw)
+
+    report = build_report(findings)
+
+    html = generate_html(report)
+
+    pdf = tempfile.NamedTemporaryFile(
+        delete=False,
+        suffix=".pdf",
+    )
+
+    export_pdf(
+        html,
+        pdf.name,
+    )
+
+    return FileResponse(
+        pdf.name,
+        filename="vulpilot_report.pdf",
+        media_type="application/pdf",
+    )
