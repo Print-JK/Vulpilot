@@ -1,29 +1,235 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vulpilot</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background: #18182d;
+            color: white;
+        }
+
+        /* Navbar */
+        nav {
+            height: 70px;
+            background: #1f2945;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+        }
+
+        nav h2 {
+            font-size: 34px;
+            font-weight: 800;
+        }
+
+        nav h2 span {
+            color: #ff4b4b;
+        }
+
+        nav .links {
+            display: flex;
+            gap: 30px;
+            color: #ddd;
+            font-size: 15px;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            margin-top: 35px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            color: #c8c8d2;
+            font-size: 20px;
+            max-width: 850px;
+            margin: auto;
+            line-height: 1.5;
+        }
+
+        /* Upload Card */
+        .card {
+            width: 90%;
+            max-width: 1200px;
+            margin: 45px auto;
+            background: #222f43;
+            border-radius: 16px;
+            padding: 70px;
+        }
+
+        .upload-box {
+            border: 3px dashed #ff5555;
+            border-radius: 14px;
+            min-height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .upload-box input[type=file] {
+            display: none;
+        }
+
+        .choose-btn {
+            background: #ff5252;
+            color: white;
+            padding: 15px 38px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: .2s;
+        }
+
+        .choose-btn:hover {
+            background: #ff6b6b;
+        }
+
+        .upload-box p {
+            color: #d4d4dd;
+            margin-top: 35px;
+            font-size: 17px;
+        }
+
+        .upload-box small {
+            margin-top: 28px;
+            color: #a8a8b5;
+            line-height: 1.7;
+            font-style: italic;
+        }
+
+        .buttons {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .buttons button {
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: .2s;
+        }
+
+        .view {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .pdf {
+            background: #16a34a;
+            color: white;
+        }
+
+        .buttons button:hover {
+            opacity: .9;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 20px;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+
+            .hero p {
+                font-size: 16px;
+                padding: 0 20px;
+            }
+
+            .card {
+                padding: 30px;
+            }
+
+            .upload-box {
+                min-height: 280px;
+            }
+
+            .buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .buttons button {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<h1>Vulpilot</h1>
+    <nav>
+        <h2>Vul<span>pilot</span></h2>
 
-<form action="/generate" method="post" enctype="multipart/form-data">
+        <div class="links">
+            <span>About</span>
+            <span>English</span>
+        </div>
+    </nav>
 
-    <input type="file" name="scan" required>
+    <section class="hero">
+        <h1>HTML Report Generator</h1>
+        <p>
+            Upload your vulnerability scan and instantly generate a beautiful
+            HTML report or download it as a PDF.
+        </p>
+    </section>
 
-    <br><br>
+    <div class="card">
 
-    <button formaction="/generate">
-        View HTML
-    </button>
+        <form action="/generate" method="post" enctype="multipart/form-data">
 
-    <button formaction="/generate/pdf">
-        Download PDF
-    </button>
+            <div class="upload-box">
 
-</form>
+                <label class="choose-btn" for="scan">
+                    CHOOSE FILE
+                </label>
+
+                <input id="scan" type="file" name="scan" required>
+
+                <p>click to upload.</p>
+
+                <div class="buttons">
+                    <button class="view" formaction="/generate">
+                        View HTML
+                    </button>
+
+                    <button class="pdf" formaction="/generate/pdf">
+                        Download PDF
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
 
 </body>
 
