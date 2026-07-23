@@ -2,7 +2,6 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
-
 TEMPLATE_DIR = Path(__file__).parent / "templates"
 
 env = Environment(
@@ -11,7 +10,7 @@ env = Environment(
 )
 
 
-def generate_html(findings):
+def generate_html(report):
     template = env.get_template("report.html")
 
     severity_counts = {
@@ -23,11 +22,10 @@ def generate_html(findings):
         "Unknown": 0,
     }
 
-    for finding in findings:
+    for finding in report.findings:
         severity_counts[finding.severity] += 1
 
     return template.render(
-        findings=findings,
-        total_findings=len(findings),
+        report=report,
         severity_counts=severity_counts,
     )

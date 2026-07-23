@@ -6,6 +6,7 @@ from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import Request
 from app.parsers.factory import ParserFactory
+from app.services import report
 from app.services.pipeline import process_all
 from app.report.builder import build_report
 from app.report.renderer import generate_html
@@ -52,6 +53,12 @@ async def generate(scan: UploadFile = File(...)):
 
     report = build_report(findings)
 
+    print(type(report))
+    print(type(report.findings))
+
+    for item in report.findings:
+        print(type(item), item)
+        
     html = generate_html(report)
 
     return HTMLResponse(html)
