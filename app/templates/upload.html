@@ -186,18 +186,12 @@
 
     <nav>
         <h2>Vul<span>pilot</span></h2>
-
-        <div class="links">
-            <span>About</span>
-            <span>English</span>
-        </div>
     </nav>
 
     <section class="hero">
         <h1>HTML Report Generator</h1>
         <p>
-            Upload your vulnerability scan and instantly generate a beautiful
-            HTML report or download it as a PDF.
+            Upload your vulnerability scan and generate a HTML report or download it as a PDF.
         </p>
     </section>
 
@@ -213,7 +207,7 @@
 
                 <input id="scan" type="file" name="scan" required>
 
-                <p>click to upload.</p>
+                <p id="file-name">Click to upload.</p>
 
                 <div class="buttons">
                     <button class="view" formaction="/generate">
@@ -230,6 +224,23 @@
         </form>
 
     </div>
+<script>
+    const fileInput = document.getElementById("scan");
+    const fileName = document.getElementById("file-name");
+
+    console.log(fileInput);
+    console.log(fileName);
+
+    fileInput.addEventListener("change", function () {
+
+        if (this.files.length > 0) {
+            fileName.textContent = "uploaded " + this.files[0].name;
+        } else {
+            fileName.textContent = "Click to upload.";
+        }
+    });
+</script>
+
 
 </body>
 
