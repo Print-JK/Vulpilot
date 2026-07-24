@@ -1,154 +1,434 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Vulpilot Report</title>
-    <link rel="stylesheet" href="../static/style.css">
+<meta charset="UTF-8">
+<title>Vulpilot Security Report</title>
+
+<style>
+
+@page {
+    margin: 22mm;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:#0F172A;
+    color:#E2E8F0;
+    font-family:Arial, Helvetica, sans-serif;
+    line-height:1.6;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:50px;
+}
+
+.header{
+    border-bottom:3px solid #06B6D4;
+    margin-bottom:35px;
+    padding-bottom:20px;
+}
+
+.logo{
+    font-size:38px;
+    font-weight:bold;
+    color:#06B6D4;
+}
+
+.subtitle{
+    color:#94A3B8;
+    margin-top:6px;
+}
+
+.meta{
+    display:flex;
+    justify-content:space-between;
+    margin-top:25px;
+    color:#CBD5E1;
+    font-size:14px;
+}
+
+.section{
+    margin-top:40px;
+}
+
+.section-title{
+    font-size:22px;
+    color:#06B6D4;
+    border-left:5px solid #06B6D4;
+    padding-left:12px;
+    margin-bottom:20px;
+}
+
+.card{
+    background:#1E293B;
+    border:1px solid #334155;
+    border-radius:12px;
+    padding:24px;
+    margin-bottom:25px;
+}
+
+.summary{
+    font-size:15px;
+}
+
+.summary h1,
+.summary h2,
+.summary h3{
+    color:#FFFFFF;
+    margin-top:18px;
+}
+
+.summary ul{
+    padding-left:22px;
+}
+
+.overview{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:15px;
+}
+
+.metric{
+    background:#1E293B;
+    border:1px solid #334155;
+    border-radius:10px;
+    text-align:center;
+    padding:18px;
+}
+
+.metric-number{
+    font-size:30px;
+    font-weight:bold;
+}
+
+.metric-label{
+    color:#94A3B8;
+    font-size:14px;
+}
+
+.finding{
+    background:#1E293B;
+    border-radius:12px;
+    border:1px solid #334155;
+    margin-bottom:25px;
+    overflow:hidden;
+}
+
+.finding-header{
+    background:#172554;
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.finding-title{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.badge{
+    padding:6px 14px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.Critical{
+    background:#991B1B;
+}
+
+.High{
+    background:#DC2626;
+}
+
+.Medium{
+    background:#D97706;
+}
+
+.Low{
+    background:#15803D;
+}
+
+.Informational{
+    background:#2563EB;
+}
+
+.Unknown{
+    background:#475569;
+}
+
+.finding-body{
+    padding:24px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.info{
+    background:#0F172A;
+    border:1px solid #334155;
+    padding:12px;
+    border-radius:8px;
+}
+
+.info strong{
+    color:#06B6D4;
+}
+
+.evidence{
+    background:#020617;
+    border:1px solid #334155;
+    border-radius:8px;
+    padding:18px;
+    margin-top:15px;
+    white-space:pre-wrap;
+    word-break:break-word;
+    font-family:monospace;
+}
+
+.footer{
+    margin-top:60px;
+    text-align:center;
+    color:#64748B;
+    font-size:13px;
+}
+
+hr{
+    border:none;
+    border-top:1px solid #334155;
+    margin:30px 0;
+}
+
+</style>
+
 </head>
 
 <body>
 
-<div class="report">
+<div class="container">
 
-    <header>
-        <h1>Vulpilot Security Report</h1>
+<div class="header">
 
-        <div class="meta">
-            <div>
-                <strong>Generated</strong><br>
-                {{ report.metadata.generated_on }}
-            </div>
+<div class="logo">
+VULPILOT
+</div>
 
-            <div>
-                <strong>Scope</strong><br>
-                {% for host in report.metadata.scope %}
-                    {{ host }}{% if not loop.last %}, {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-    </header>
+<div class="subtitle">
+Automated Penetration Testing Report
+</div>
 
-    <section>
-        <h2>Executive Summary</h2>
+<div class="meta">
 
-        <div class="section-body">
-            {{ report.summary.text }}
-        </div>
-    </section>
+<div>
 
-    <section>
-        <h2>Overview</h2>
+<strong>Generated</strong><br>
+{{ report.metadata.generated_on }}
 
-        <div class="overview">
+</div>
 
-            <div class="card">
-                <h3>Total Findings</h3>
-                <p>{{ report.findings|length }}</p>
-            </div>
+<div>
 
-            <div class="card critical">
-                <h3>Critical</h3>
-                <p>{{ severity_counts.Critical }}</p>
-            </div>
+<strong>Scope</strong><br>
 
-            <div class="card high">
-                <h3>High</h3>
-                <p>{{ severity_counts.High }}</p>
-            </div>
+{% for host in report.metadata.scope %}
+{{ host }}{% if not loop.last %}, {% endif %}
+{% endfor %}
 
-            <div class="card medium">
-                <h3>Medium</h3>
-                <p>{{ severity_counts.Medium }}</p>
-            </div>
+</div>
 
-            <div class="card low">
-                <h3>Low</h3>
-                <p>{{ severity_counts.Low }}</p>
-            </div>
+</div>
 
-            <div class="card info">
-                <h3>Informational</h3>
-                <p>{{ severity_counts.Informational }}</p>
-            </div>
+</div>
 
-        </div>
-    </section>
+<div class="section">
 
-    <section>
+<div class="section-title">
+Executive Summary
+</div>
 
-        <h2>Findings</h2>
+<div class="card summary">
 
-        {% for finding in report.findings %}
+{{ summary_html | safe }}
 
-        <article class="finding">
+</div>
 
-            <div class="finding-header">
+</div>
 
-                <h3>{{ finding.title }}</h3>
+<div class="section">
 
-                <span class="severity {{ finding.severity|lower }}">
-                    {{ finding.severity }}
-                </span>
+<div class="section-title">
+Findings Overview
+</div>
 
-            </div>
+<div class="overview">
 
-            <table>
+<div class="metric">
+<div class="metric-number">{{ severity_counts.Critical }}</div>
+<div class="metric-label">Critical</div>
+</div>
 
-                <tr>
-                    <th>Host</th>
-                    <td>{{ finding.host }}</td>
-                </tr>
+<div class="metric">
+<div class="metric-number">{{ severity_counts.High }}</div>
+<div class="metric-label">High</div>
+</div>
 
-                <tr>
-                    <th>Port</th>
-                    <td>{{ finding.port }}</td>
-                </tr>
+<div class="metric">
+<div class="metric-number">{{ severity_counts.Medium }}</div>
+<div class="metric-label">Medium</div>
+</div>
 
-                <tr>
-                    <th>Detected By</th>
-                    <td>{{ finding.detected_by|join(", ") }}</td>
-                </tr>
+<div class="metric">
+<div class="metric-number">{{ severity_counts.Low }}</div>
+<div class="metric-label">Low</div>
+</div>
 
-                {% if finding.cwe %}
-                <tr>
-                    <th>CWE</th>
-                    <td>{{ finding.cwe }}</td>
-                </tr>
-                {% endif %}
+<div class="metric">
+<div class="metric-number">{{ severity_counts.Informational }}</div>
+<div class="metric-label">Info</div>
+</div>
 
-                {% if finding.mitre %}
-                <tr>
-                    <th>MITRE</th>
-                    <td>{{ finding.mitre }}</td>
-                </tr>
-                {% endif %}
+<div class="metric">
+<div class="metric-number">{{ report.findings|length }}</div>
+<div class="metric-label">Total</div>
+</div>
 
-            </table>
+</div>
 
-            <h4>Description</h4>
-            <p>{{ finding.description }}</p>
+</div>
 
-            {% if finding.evidence %}
-            <h4>Evidence</h4>
+<div class="section">
 
-            <pre>{{ finding.evidence }}</pre>
-            {% endif %}
+<div class="section-title">
+Findings
+</div>
 
-            {% if finding.recommendation %}
-            <h4>Recommendation</h4>
+{% for finding in report.findings %}
 
-            <p>{{ finding.recommendation }}</p>
-            {% endif %}
+<div class="finding">
 
-        </article>
+<div class="finding-header">
 
-        {% endfor %}
+<div class="finding-title">
 
-    </section>
+{{ finding.title }}
+
+</div>
+
+<div class="badge {{ finding.severity }}">
+
+{{ finding.severity }}
+
+</div>
+
+</div>
+
+<div class="finding-body">
+
+<div class="grid">
+
+<div class="info">
+
+<strong>Host</strong><br>
+
+{{ finding.host }}
+
+</div>
+
+<div class="info">
+
+<strong>Port</strong><br>
+
+{{ finding.port }}
+
+</div>
+
+<div class="info">
+
+<strong>Detected By</strong><br>
+
+{{ finding.detected_by | join(", ") }}
+
+</div>
+
+<div class="info">
+
+<strong>CWE / MITRE</strong><br>
+
+{{ finding.cwe or "-" }} /
+{{ finding.mitre or "-" }}
+
+</div>
+
+</div>
+
+<h3>Description</h3>
+
+<p>
+
+{{ finding.description }}
+
+</p>
+
+{% if finding.recommendation %}
+
+<h3>Recommendation</h3>
+
+<p>
+
+{{ finding.recommendation }}
+
+</p>
+
+{% endif %}
+
+{% if finding.evidence %}
+
+<h3>Evidence</h3>
+
+<div class="evidence">
+
+{% if finding.evidence is mapping %}
+
+{% for key,value in finding.evidence.items() %}
+{{ key }} : {{ value or "Unknown" }}
+{% endfor %}
+
+{% else %}
+
+{{ finding.evidence }}
+
+{% endif %}
+
+</div>
+
+{% endif %}
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<div class="footer">
+
+Generated by <strong>Vulpilot</strong>
+
+</div>
 
 </div>
 
 </body>
-
 </html>
