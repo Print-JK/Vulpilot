@@ -57,7 +57,7 @@ Follow these steps to set up the environment and run Vulpilot locally.
 
 1.  **Clone Repository:**
     ```bash
-    git clone https://github.com/<your-username>/Vulpilot.git
+    git clone https://github.com/Print-JK/Vulpilot.git
     cd Vulpilot
     ```
 
